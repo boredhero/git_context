@@ -1,6 +1,4 @@
-from gettext import install
-import os
-import shutil, bios
+import os, shutil, bios, subprocess
 
 SRC_DIR = os.getcwd()
 HOME = os.path.expanduser('~')
@@ -54,6 +52,7 @@ def copy_git_context():
         shutil.copy2(os.path.join(SRC_DIR, "LICENSE"), install_dir_path)
         shutil.copy2(os.path.join(SRC_DIR, "README.md"), install_dir_path)
         shutil.copy2(os.path.join(SRC_DIR, "requirements.txt"), install_dir_path)
+        shutil.copy2(os.path.join(SRC_DIR, "append_rcs.sh"), install_dir_path)
         print("Successfully installed program files in ~/.git_context!")
         return
     except Exception as e:
@@ -66,10 +65,18 @@ def handle_bashrc_zshrc():
     zshrc_path = os.path.join(HOME, ".zshrc")
     bashrc_exists = os.path.exists(bashrc_path)
     zshrc_exists = os.path.exists(zshrc_path)
-    if bashrc_exists:
-        pass
-    if zshrc_exists:
-        pass
+    if bashrc_exists == True or zshrc_exists == True:
+        try:
+            out = subprocess.check_output(["bash", "./append_rcs.sh"])
+            out = out.decode("ascii")
+            print(out)
+            print("~/.bashrc and/or ~/.zshrc appended successfully.")
+            return
+        except subprocess.CalledProcessError as e:
+            print("An unknown error occured trying to append .bashrc and .zshrc.")
+            print('Please place: alias git-context="python3 $HOME/.git_context/git_context.py $pwd" or equivalent in your relevant rc file\nStacktrace:\n')
+            print(e)
+            return
     if bashrc_exists == False and zshrc_exists == False:
         print("Unable to find a .bashrc or .zshrc file in your home directory, or you use a different shell")
         print('Please place: alias git-context="python3 $HOME/.git_context/git_context.py $pwd" or equivalent in your relevant rc file')
