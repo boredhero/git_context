@@ -1,10 +1,13 @@
+import bios
 import sys
-from xml.dom.minidom import parseString
 
 def main():
     args = sys.argv
     if len(args) == 1:
-        help()
+        gc_help()
+        exit()
+    elif len(args) == 2 and args[1] == "help":
+        gc_help()
         exit()
 
 def gc_list():
@@ -23,9 +26,10 @@ def gc_clone():
     pass
 def gc_help():
     try:
+        info = bios.read("info.yml", file_type="yaml")
         help_file = open("man.txt", "r")
         help_text = help_file.read()
-        print("\n")
+        print(f"{info['pretty_name']} - v{info['version']} '{info['version_nickname']}' by {info['author']}\n")
         print(help_text)
         help_file.close()
     except Exception as e:

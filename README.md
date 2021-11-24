@@ -38,3 +38,7 @@ No. But if you do it I'll accept the PR
 ### Can you port it to [Insert Language Here]
 
 No. Make your own.
+
+## Dependencies?
+
+```pip install -r requirements.txt```
