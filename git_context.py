@@ -3,6 +3,8 @@ import sys
 
 def main():
     args = sys.argv
+    data = {"abc": 123}
+    write_data(data)
     if len(args) == 1:
         gc_help()
         exit()
@@ -69,6 +71,27 @@ def read_data():
         print("An unknown error occured\n Stacktrace: \n")
         print(e)
         exit
+
+def write_data(d):
+    '''
+    Write Data
+
+    :param dict d: Data dictionary to write
+    '''
+    if type(d) is not dict:
+        try:
+            d = dict(d)
+        except Exception as e:
+            print(e)
+            exit()
+    try:
+        bios.write("data.yml", d, file_type="yaml")
+    except Exception as e:
+        print("An unknown error occured while trying to write data\n Stacktrace: \n")
+        print(e)
+        exit()
+
+
 
 if __name__ == "__main__":
     main()
