@@ -26,3 +26,15 @@ Out of the kindness of my heart
 | `git-context get` | Returns git_username of current global or local git context |
 | `git-context set [git_username]` | If in a git repo, change local config to use the correct git context, else set the global defaults |
 | `git-context clone [git_username] [remote_https_or_ssh_url] [optional recurse:true]` | Clones a git repository using the current context returned by `git-context get` |
+
+## What OS does this support?
+
+Linux. Tested on Arch Linux, your distro may vary. PRs accepted.
+
+### Can you port it to Mac OS/Windows/Temple OS/etc
+
+No. But if you do it I'll accept the PR
+
+### Can you port it to [Insert Language Here]
+
+No. Make your own.
