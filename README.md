@@ -42,3 +42,8 @@ No. Make your own.
 ## Dependencies?
 
 ```pip install -r requirements.txt```
+
+## Install
+
+An install script is coming. Note that in order to know file directory, the arg after python3 git_context.py should be $(pwd)
+This will go in your .bashrc or .zshrc so that when you use the alias git-context by typing `git-context get` the actual command issued to the program via your rc file is python3 git_context.py $(pwd) [your other args here, ex 'get']

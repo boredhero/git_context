@@ -1,5 +1,7 @@
 # Custom stuff for Git Context
 data.yml
+tester.py
+tester.sh
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
