@@ -1,0 +1,6 @@
+# Global context file. Should install this to home directory. Contains paths to executables and other config files.
+install_folder_path: "/home/noah/code/other/git_context/"
+executable_path: "/home/noah/code/other/git_context/git_context.py"
+info_path: "/home/noah/code/other/git_context/info.yml"
+data_path: "/home/noah/code/other/git_context/data.yml"
+man_path: "/home/noah/code/other/git_context/man.txt"
