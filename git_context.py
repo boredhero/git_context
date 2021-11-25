@@ -114,7 +114,51 @@ def write_data(d):
         print(e)
         exit()
 
+def generate_ssh_keypair(email, password, filename, key_type="ed25519"):
+    """
+    :param str email:
+    :param str password:
+    :param str filename:
+    :param str key_type: Must be "ed25519" or "rsa"
 
+    :returns bool: True if successful, False otherwise
+    """
+    ssh_path = os.path.join(HOME, ".ssh")
+    filenames = next(os.walk(ssh_path), (None, None, []))[2]
+    if filename in filenames:
+        print(f"WARNING: INVALID FILENAME!\nYour filename '{filename}' already exists in ~/.ssh/")
+        print("Please choose a filename that is not among the followling list\n")
+        print(filenames + "\n")
+        filename = input("Please enter a new filename: ")
+        res = generate_ssh_keypair(email, password, filename, key_type)
+        return res
+    if key_type == "ed25519":
+        cmd = f'ssh-keygen -t ed25519 -C "{email}" -N "{password}" -f ~/.ssh/{filename} <<<y'
+        print(f"Attempting to execute: {cmd}")
+        try:
+            stream = os.popen(cmd)
+            output = stream.read()
+            print(output)
+            return True
+        except Exception as e:
+            print("An error occured trying to create ed25519 key. Please manually create a key and use git-context add to create this profile.\nStacktrace:\n")
+            print(e)
+            return False
+    elif key_type == "rsa":
+        cmd = f'ssh-keygen -t rsa -b 4096 -C "{email}" -N "{password}" -f ~/.ssh/{filename} <<<y'
+        print(f"Attempting to execute: {cmd}")
+        try:
+            stream = os.popen(cmd)
+            output = stream.read()
+            print(output)
+            return True
+        except Exception as e:
+            print("An error occured trying to create rsa key. Please manually create a key and use git-context add to create this profile.\nStacktrace:\n")
+            print(e)
+            return False
+    else:
+        print(f"Error: Key type must be 'ed25519' or 'rsa'. Passed '{key_type}' instead.\nPlease generate your own SSH keys and add them with 'git_context add'")
+        return False
 
 if __name__ == "__main__":
     main()
