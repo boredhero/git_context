@@ -6,17 +6,23 @@ HOME = os.path.expanduser('~')
 
 def main():
     args = sys.argv
-    data = {"abc": 123}
-    write_data(data)
+    print(args)
     if len(args) == 1:
         gc_help()
         exit()
-    elif len(args) == 3 and args[2] == "help":
+    elif len(args) == 3 and args[1] == "help":
         gc_help()
         exit()
-    elif len(args) == 3 and args[2] == "list":
+    elif len(args) == 3 and args[1] == "list":
         gc_list()
         exit()
+    elif args[1] == "create":
+        if len(args) < 6:
+            print("More args required for git create")
+            exit()
+        else:
+            gc_create(args)
+            exit()
     else:
         gc_help()
         exit()
@@ -26,8 +32,18 @@ def gc_list():
         print("There are currently no contexts. To see how to get started, see 'git_context help'\n")
 def gc_add():
     pass
-def gc_create():
-    pass
+def gc_create(args):
+    username = args[2]
+    email = args[3]
+    key_type = args[4]
+    filename = generate_ssh_keypair(email, key_type)
+    if filename is None:
+        print("Error creating keys for git-context create. Aborting. Please manually create keys and use git-context add")
+    else:
+        data = read_data()
+        data["Contexts"][username] = {"email": email, "key_type": key_type, "username": username, "filename": filename}
+        write_data(data)
+    exit()
 def gc_delete():
     pass
 def gc_get():
@@ -114,17 +130,24 @@ def write_data(d):
         print(e)
         exit()
 
-def generate_ssh_keypair(email, password, filename, key_type="ed25519"):
+def generate_ssh_keypair(email, key_type="ed25519"):
     """
     :param str email:
-    :param str password:
-    :param str filename:
     :param str key_type: Must be "ed25519" or "rsa"
 
-    :returns bool: True if successful, False otherwise
+    :returns: str (filename) if successful, False otherwise
     """
     ssh_path = os.path.join(HOME, ".ssh")
     filenames = next(os.walk(ssh_path), (None, None, []))[2]
+    # Input Section
+    password = ask_password()
+    if password is None:
+        password = ""
+    filename = input("Please enter a filename for your key (no spaces or special chars):")
+    if filename == "" or filename == " ":
+        res = generate_ssh_keypair(email, password, key_type)
+        return res
+    # End Input section
     if filename in filenames:
         print(f"WARNING: INVALID FILENAME!\nYour filename '{filename}' already exists in ~/.ssh/")
         print("Please choose a filename that is not among the followling list\n")
@@ -139,7 +162,7 @@ def generate_ssh_keypair(email, password, filename, key_type="ed25519"):
             stream = os.popen(cmd)
             output = stream.read()
             print(output)
-            return True
+            return filename
         except Exception as e:
             print("An error occured trying to create ed25519 key. Please manually create a key and use git-context add to create this profile.\nStacktrace:\n")
             print(e)
@@ -151,7 +174,7 @@ def generate_ssh_keypair(email, password, filename, key_type="ed25519"):
             stream = os.popen(cmd)
             output = stream.read()
             print(output)
-            return True
+            return filename
         except Exception as e:
             print("An error occured trying to create rsa key. Please manually create a key and use git-context add to create this profile.\nStacktrace:\n")
             print(e)
@@ -159,6 +182,18 @@ def generate_ssh_keypair(email, password, filename, key_type="ed25519"):
     else:
         print(f"Error: Key type must be 'ed25519' or 'rsa'. Passed '{key_type}' instead.\nPlease generate your own SSH keys and add them with 'git_context add'")
         return False
+
+def ask_password():
+    y_n = input("Would you like a password? (Yy/Nn): ")
+    if y_n == "" or y_n == " " or y_n == "N" or y_n == "n" or y_n == "No" or y_n == "no":
+        return None
+    elif y_n == "Y" or y_n == "y" or y_n == "Yes" or y_n == "yes":
+        password = input("Please enter a password: ")
+        return password
+    else:
+        print("Error: Invalid input to Y/N Question")
+        password = ask_password()
+        return password
 
 if __name__ == "__main__":
     main()
