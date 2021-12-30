@@ -30,7 +30,8 @@ def gc_list():
     data = read_data()
     if data["Contexts"] is None:
         print("There are currently no contexts. To see how to get started, see 'git_context help'\n")
-def gc_add():
+def gc_add(args):
+    username = args[2]
     pass
 def gc_create(args):
     username = args[2]
@@ -44,15 +45,15 @@ def gc_create(args):
         data["Contexts"][username] = {"email": email, "key_type": key_type, "username": username, "filename": filename}
         write_data(data)
     exit()
-def gc_delete():
+def gc_delete(args):
     pass
-def gc_get():
+def gc_get(args):
     pass
-def gc_set():
+def gc_set(args):
     pass
-def gc_clone():
+def gc_clone(args):
     pass
-def gc_help():
+def gc_help(args):
     try:
         paths = read_global_paths()
         info = bios.read(paths["info_path"], file_type="yaml")

@@ -20,7 +20,7 @@ Out of the kindness of my heart
 | :-: | :-: |
 | `git-context help` | Displays this list of commands |
 | `git-context list` | Returns a list of git contexts |
-| `git-context add [git_username] ["/path/to/ssh_file.pub"]` | Adds a git context from username and file |
+| `git-context add [git_username] [email] [key_type "ed25519" or "rsa"] ["/path/to/ssh_file.pub"]` | Adds a git context from username and file |
 | `git-context create [git_username] [email] [key_type "ed25519" or "rsa"]` | This generates a key via ssh-keygen, names it, and adds it to this system |
 | `git-context delete [git_username]` | Self explanatory |
 | `git-context get` | Returns git_username of current global or local git context |
