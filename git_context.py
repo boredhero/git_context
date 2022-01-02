@@ -88,10 +88,13 @@ def gc_delete(args):
         exit(1)
 
 def gc_get(args):
+    # TODO: Automate this https://gist.github.com/jexchan/2351996
     pass
 def gc_set(args):
+    # TODO: Automate this https://gist.github.com/jexchan/2351996
     pass
 def gc_clone(args):
+    # TODO: Automate this https://gist.github.com/jexchan/2351996
     pass
 def gc_help(args):
     try:
