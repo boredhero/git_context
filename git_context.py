@@ -30,6 +30,10 @@ def gc_list():
     data = read_data()
     if data["Contexts"] is None:
         print("There are currently no contexts. To see how to get started, see 'git_context help'\n")
+    else:
+        print("Context Data:\n")
+        print(data)
+        exit(0)
 def gc_add(args):
     username = args[2]
     email = args[3]
