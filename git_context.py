@@ -73,7 +73,20 @@ def gc_create(args):
         write_data(data)
     return
 def gc_delete(args):
-    pass
+    data = read_data()
+    username = args[2]
+    if type(username) is not str:
+        print("Username must be of type str. Aborting")
+        exit(1)
+    try:
+        data = data["Contexts"][username] = None
+        write_data(data)
+        return
+    except Exception as e:
+        print(f"An unknown issue occured trying to delete this context. Did it exist? name: {username}\n")
+        print(e)
+        exit(1)
+
 def gc_get(args):
     pass
 def gc_set(args):
